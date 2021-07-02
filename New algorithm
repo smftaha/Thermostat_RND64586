@@ -1,0 +1,65 @@
+fcpu  =1M
+Uart 9600bps => 1ms transfer time, 0.2% ERR
+------------------------------------------------
+HC595 
+OE: pull up,  to mcu, dis-write new value, enable
+or  1)  write:  rel,  00000
+    2)  write:  rel,  new led
+------------------------------------------------
+#define   DEL1US  #asm  ("nop")
+repeat asm *  (fcpu/1M)
+------------------------------------------------
+now Thermo
+Tick: 4ms
+if  ( Tick)
+{
+  Tick  =0;
+  if  (( TickCnt &1) ==0)
+    F_KeyDbnc ();
+  else
+  {
+    switch  ( ( TickCnt >>1)  &0x7)
+    { //each  8ms
+      //case: each 64ms
+      case  0~7:
+      break;
+      
+      if  ( F.NewKey) in  case
+    }
+  }
+}
+stanby;
+------------------------------------------------
+future Thermo
+Tick: 2ms
+if  ( Tick)
+{
+  Tick  =0;
+  if  (( TickCnt &1) ==0)
+  {
+    F_KeyDbnc  ();
+    F_ShReg    ();
+  }
+  else
+  {
+    if  (( TickCnt &2) ==0)
+  
+    switch  ( ( TickCnt >>2)  &0x7)
+    { //each  8ms
+      //case: each 64ms
+      case  0~7:
+      break;
+      
+      if  ( F.NewKey) in  case
+    }
+  }
+}
+stanby;
+------------------
+TickCnt:  0   1   2   3   4   5   6   7
+          D   S   D   x   D   S   D   x
+          ------------------
+          D:  default task
+          S:  switch case task
+          x:  no task;
+------------------------------------------------
